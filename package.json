@@ -4,13 +4,16 @@
   "description": "the best meatbot around",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest -i",
+    "cli_test": "node index.js run test-script",
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
   "author": "Igor and Vadim",
   "license": "MIT",
   "dependencies": {
+    "commander": "^6.1.0",
+    "dotenv": "^8.2.0",
     "puppeteer": "^5.2.1"
   },
   "devDependencies": {

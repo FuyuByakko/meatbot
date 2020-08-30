@@ -1,6 +1,12 @@
+const interpreter = require('./interpreter');
 const browserInstance = require('../lib/browser');
 const path = require('path');
-const click = require('./click');
+
+const actions = [
+  { type: 'goto', destination: ''},
+  { type: 'click', targetSelector: ''},
+  { type: 'input', targetSelector: '', text: ''},
+]
 
 describe("Click Action", () => {
   let browser;
