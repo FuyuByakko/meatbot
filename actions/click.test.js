@@ -32,6 +32,6 @@ describe("Click Action", () => {
     await click(page, { targetSelector: 'a.goto-page-two' });
     const newURL = `${path.join('file:', __dirname,'fixtures', 'test-page-two.html')}`
     const newURLpath = path.join(`${page.url()}`);
-    expect(newURLpath).toBe(newURL);
+    expect(newURLpath).toEqual(newURL);
   });
 })
