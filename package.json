@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest -i",
-    "cli_test": "node index.js run test-script",
+    "cli": "node index.js run",
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
