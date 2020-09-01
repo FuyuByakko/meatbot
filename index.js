@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 const { program } = require('commander');
 
-const { interpreter } = require('./interpreter');
+const { createScriptRunner, endScriptRunner } = require('./lib/scriptRunner');
 
 dotenv.config();
 
@@ -10,7 +10,9 @@ program.version('0.0.1')
   .action(async (file) => {
     console.log(`Running ${file}`);
     const script = require(`./scripts/${file}`);
-    await interpreter(script);
+    const scriptRunner = await createScriptRunner();
+    await scriptRunner(script);
+    await endScriptRunner();
   });
 program.parse(process.argv);
 process.on('unhandledRejection', console.error);
