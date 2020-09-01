@@ -1,5 +1,10 @@
-const { interpreter } = require('./interpreter');
+const dotenv = require('dotenv');
 const { program } = require('commander');
+
+const { interpreter } = require('./interpreter');
+
+dotenv.config();
+
 program.version('0.0.1')
   .command('run <file>')
   .action(async (file) => {
