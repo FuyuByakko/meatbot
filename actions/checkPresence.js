@@ -3,7 +3,7 @@ const {
   createActionResultEnd,
   ACTION_RESULT_JUMP,
   ACTION_RESULT_END
-} = require('../lib/interpreter');
+} = require('../lib/resultActions');
 
 const checkPresence = async (page, { targetSelector, xpath, onCheckFail, stepId, invert }) => {
   let result = [];

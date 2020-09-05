@@ -4,7 +4,7 @@ const checkPresence = require('./checkPresence');
 const {
   ACTION_RESULT_JUMP,
   ACTION_RESULT_END
-} = require('../lib/interpreter');
+} = require('../lib/resultActions');
 
 describe("checkPresence Action", () => {
   let browser;
