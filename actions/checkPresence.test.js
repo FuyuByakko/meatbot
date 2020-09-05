@@ -50,6 +50,35 @@ describe("checkPresence Action", () => {
     expect(result.result).toEqual(ACTION_RESULT_END);
   });
 
+  test("should jump to another step if element does not exist (xpath)", async () => {
+    const result = await checkPresence(page, {
+      xpath: '//a[@class="non-existing-element"]',
+      onCheckFail: ACTION_RESULT_JUMP,
+      stepId: 'some-step-id'
+    });
+    expect(result.result).toEqual(ACTION_RESULT_JUMP);
+    expect(result.stepId).toEqual('some-step-id');
+  });
+
+  test("should end script execution if element does not exist (xpath)", async () => {
+    const result = await checkPresence(page, {
+      xpath: '//a[@class="non-existing-class"]',
+      onCheckFail: ACTION_RESULT_END
+    });
+    expect(result.result).toEqual(ACTION_RESULT_END);
+  });
+
+  test("should jump to another step if element exists && invert (xpath)", async () => {
+    const result = await checkPresence(page, {
+      xpath: '//a[@class="element"]',
+      onCheckFail: ACTION_RESULT_JUMP,
+      stepId: 'some-step-id',
+      invert: true
+    });
+    expect(result.result).toEqual(ACTION_RESULT_JUMP);
+    expect(result.stepId).toEqual('some-step-id');
+  });
+
   test("should jump to another step if element exists && invert", async () => {
     const result = await checkPresence(page, {
       targetSelector: 'a.element',
