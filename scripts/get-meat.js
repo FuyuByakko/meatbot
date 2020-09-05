@@ -37,5 +37,10 @@ module.exports = {
       invert: true,
       onCheckFail: 'end'
     },
+    {
+      type: 'get',
+      description: 'Get ticket number',
+      xpath: config.selectors.outsideWorkingHours,
+    },
   ]
 };

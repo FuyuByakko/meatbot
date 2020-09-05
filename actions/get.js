@@ -1,13 +1,22 @@
-const get = async (page, { targetSelector }) => {
-		let result = []
+const get = async (page, { targetSelector, xpath, keyName }, storage) => {
+		let result = [];
+
 		try {
-			result = await page.$$eval(`${targetSelector}`, elArr => {
-				return elArr.map(element => element.innerText);
-			});
+			let elementHandles;
+
+			if (targetSelector) {
+				elementHandles = await page.$$(targetSelector);
+			}
+
+			if (xpath) {
+				elementHandles = await page.$x(xpath);
+			}
+
+			result = await Promise.all(elementHandles.map(element => element.evaluate(e =>e.innerText)));
     } catch (error) {
 			console.error(error.message);
 		} finally {
-			return result;
+			storage.set(keyName, result);
 		}
 }
 
