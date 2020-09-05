@@ -1,4 +1,6 @@
-const get = async (page, { targetSelector, xpath, keyName }, storage) => {
+const { createActionResultSave } = require('../lib/resultActions');
+
+const get = async (page, { targetSelector, xpath }) => {
 		let result = [];
 
 		try {
@@ -11,12 +13,13 @@ const get = async (page, { targetSelector, xpath, keyName }, storage) => {
 			if (xpath) {
 				elementHandles = await page.$x(xpath);
 			}
-
-			result = await Promise.all(elementHandles.map(element => element.evaluate(e =>e.innerText)));
+			if (elementHandles) {
+				result = await Promise.all(elementHandles.map(element => element.evaluate(e =>e.innerText)));
+			}
     } catch (error) {
 			console.error(error.message);
 		} finally {
-			storage.set(keyName, result);
+			return createActionResultSave(result);
 		}
 }
 

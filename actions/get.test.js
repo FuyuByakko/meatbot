@@ -32,22 +32,22 @@ describe('GET Action', () => {
 
   test('should return an empty array on an invalid selector', async () => {
     const expectedResult = []
-    await get(page, { targetSelector: '', keyName: 'key1' }, storage);
-    expect(storage.get('key1')).toEqual(expectedResult);
-    await get(page, { targetSelector: 'invalidSelecotr', keyName: 'key2' }, storage);
-    expect(storage.get('key2')).toEqual(expectedResult);
+    const result = await get(page, { targetSelector: '', keyName: 'key1' });
+    expect(result.data).toEqual(expectedResult);
+    const result2 = await get(page, { targetSelector: 'invalidSelecotr', keyName: 'key2' });
+    expect(result2.data).toEqual(expectedResult);
   });
 
   test('should return an epty array when selector is not found', async () => {
     const expectedResult = []
-    await get(page, { targetSelector: 'h4', keyName: 'key' }, storage);
-    expect(storage.get('key')).toEqual(expectedResult);
+    const result = await get(page, { targetSelector: 'h4', keyName: 'key' });
+    expect(result.data).toEqual(expectedResult);
   });
 
   test('should return the value of a unique selector at index 0', async () => {
     const expectedResult = 'Take us to test page two'
-    await get(page, { targetSelector: '.goto-page-two', keyName: 'key' }, storage);
-    expect(storage.get('key')[0]).toEqual(expectedResult);
+    const result = await get(page, { targetSelector: '.goto-page-two', keyName: 'key' });
+    expect(result.data[0]).toEqual(expectedResult);
   });
 
   test('should return an array of values on multile matches with selector', async () => {
@@ -57,8 +57,8 @@ describe('GET Action', () => {
       'To Catch Them All'
     ];
 
-    await get(page, { targetSelector: 'h1', keyName: 'key' }, storage);
-    expect(storage.get('key')).toEqual(expectedResult);
+    const result = await get(page, { targetSelector: 'h1', keyName: 'key' });
+    expect(result.data).toEqual(expectedResult);
   });
 
   test('should return an array of values on multile matches with XPath', async () => {
@@ -68,7 +68,7 @@ describe('GET Action', () => {
       'To Catch Them All'
     ];
 
-    await get(page, { xpath: '//h1', keyName: 'key' }, storage);
-    expect(storage.get('key')).toEqual(expectedResult);
+    const result = await get(page, { xpath: '//h1', keyName: 'key' }, storage);
+    expect(result.data).toEqual(expectedResult);
   });
 });
