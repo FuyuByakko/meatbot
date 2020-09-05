@@ -1,3 +1,5 @@
+const path = require('path');
+
 const config = {
   loginUrl: 'https://epark.jp/',
   restaurantUrl: 'https://epark.jp/detail/wait/5279',
@@ -14,9 +16,15 @@ const config = {
     preferedSeatSelector: "input[value='492641']",
     acceptTermsButton: "input[value='492645']",
     nextBtn: 'input[type=submit]',
-
+    confirmBtn: 'input[value="受付する"]',
+    ticketNumber: '//tr[th[contains(.,"受付番号")]]/td'
   }
 };
+
+if (process.env.NODE_ENV === 'test') {
+  config.loginUrl = `${path.join('file:', __dirname, '..', 'actions', 'fixtures', 'top-page.html')}`;
+  config.restaurantUrl = `${path.join('file:', __dirname, '..', 'actions', 'fixtures', 'homepage-open-available.html')}`;
+}
 
 const username = process.env.LOGIN_USER || '';
 const password = process.env.LOGIN_PASS || '';
@@ -60,8 +68,11 @@ module.exports = {
     { type: 'click', targetSelector: config.selectors.getTicketButton, waitForNavigation: true },
     { type: 'input', targetSelector: config.selectors.numOfPeopleInput, text: '3'},
     { type: 'click', targetSelector: config.selectors.preferedSeatSelector },
+    { type: 'delay', delayTimer: 500 },
     { type: 'click', targetSelector: config.selectors.acceptTermsButton },
+    { type: 'delay', delayTimer: 1000 },
     { type: 'click', targetSelector: config.selectors.nextBtn, waitForNavigation: true },
-    { type: 'click', targetSelector: config.selectors.nextBtn, waitForNavigation: true }
+    { type: 'click', targetSelector: config.selectors.confirmBtn, waitForNavigation: true },
+    { type: 'get', xpath: config.selectors.ticketNumber, keyName: 'ticketNumber' }
   ]
 };
