@@ -5,6 +5,7 @@ const get = require('./get');
 describe('GET Action', () => {
   let browser;
   let page;
+  let storage;
 
   beforeAll(async () => {
     browser = await browserInstance()
@@ -16,36 +17,37 @@ describe('GET Action', () => {
 
   beforeEach(async () => {
     page = await browser.newPage();
-    const URL = `${path.join('file:', __dirname,'fixtures', 'test-page-three.html')}`
-    await page.goto(URL)
+    const URL = `${path.join('file:', __dirname,'fixtures', 'test-page-three.html')}`;
+    await page.goto(URL);
+    storage = new Map();
   });
 
   afterEach(async () => {
     await page.close();
   });
-  
+
   test('should exist', () => {
     expect(get).toBeDefined();
   });
 
   test('should return an empty array on an invalid selector', async () => {
     const expectedResult = []
-    let result = await get(page, { targetSelector: '' });
-    expect(result).toEqual(expectedResult);
-    let result2 = await get(page, { targetSelector: 'invalidSelecotr' });
-    expect(result2).toEqual(expectedResult);
+    await get(page, { targetSelector: '', keyName: 'key1' }, storage);
+    expect(storage.get('key1')).toEqual(expectedResult);
+    await get(page, { targetSelector: 'invalidSelecotr', keyName: 'key2' }, storage);
+    expect(storage.get('key2')).toEqual(expectedResult);
   });
 
   test('should return an epty array when selector is not found', async () => {
     const expectedResult = []
-    let result = await get(page, { targetSelector: 'h4' });
-    expect(result).toEqual(expectedResult);
+    await get(page, { targetSelector: 'h4', keyName: 'key' }, storage);
+    expect(storage.get('key')).toEqual(expectedResult);
   });
-  
+
   test('should return the value of a unique selector at index 0', async () => {
     const expectedResult = 'Take us to test page two'
-    let result = await get(page, { targetSelector: '.goto-page-two' });
-    expect(result[0]).toEqual(expectedResult);
+    await get(page, { targetSelector: '.goto-page-two', keyName: 'key' }, storage);
+    expect(storage.get('key')[0]).toEqual(expectedResult);
   });
 
   test('should return an array of values on multile matches with selector', async () => {
@@ -55,7 +57,18 @@ describe('GET Action', () => {
       'To Catch Them All'
     ];
 
-    let result = await get(page, { targetSelector: 'h1' });
-    expect(result).toEqual(expectedResult);
+    await get(page, { targetSelector: 'h1', keyName: 'key' }, storage);
+    expect(storage.get('key')).toEqual(expectedResult);
+  });
+
+  test('should return an array of values on multile matches with XPath', async () => {
+    const expectedResult = [
+      'Test Page Three',
+      'Multiple Headers',
+      'To Catch Them All'
+    ];
+
+    await get(page, { xpath: '//h1', keyName: 'key' }, storage);
+    expect(storage.get('key')).toEqual(expectedResult);
   });
 });
