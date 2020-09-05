@@ -20,5 +20,9 @@ program.version('0.0.1')
 program.parse(process.argv);
 process.on('unhandledRejection', async (e) => {
   console.error(e);
-  await endScriptRunner();
+  try {
+    await endScriptRunner();
+  } catch (error) {
+    console.error(error);
+  }
 });
