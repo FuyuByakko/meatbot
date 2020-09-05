@@ -12,8 +12,10 @@ program.version('0.0.1')
     const script = require(`./scripts/${file}`);
     const scriptRunner = await createScriptRunner();
     const result = await scriptRunner(script);
-    for (const [key, value] of result.entries()) {
-      console.log(`${key}:${value}`);
+    if (result !== -1) {
+      for (const [key, value] of result.entries()) {
+        console.log(`${key}:${value}`);
+      }
     }
     await endScriptRunner();
   });
