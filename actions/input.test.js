@@ -34,4 +34,18 @@ describe("Input Action", () => {
     const searchValue = await page.$eval('input', el => el.value);
     expect(searchValue).toEqual(inputText);
   });
+
+  test("should update input field with text (xpath selector)", async () => {
+    const inputText = 'hellow, world'
+    await input(page, { xpath: '//input', text: inputText });
+    const searchValue = await page.$eval('input', el => el.value);
+    expect(searchValue).toEqual(inputText);
+  });
+
+  test("should update input field with a special character (Space)", async () => {
+    const inputText = 'hellow, world'
+    await input(page, { xpath: '//input', text: inputText, specialKey: 'Space' });
+    const searchValue = await page.$eval('input', el => el.value);
+    expect(searchValue).toEqual(inputText + ' ');
+  });
 })
