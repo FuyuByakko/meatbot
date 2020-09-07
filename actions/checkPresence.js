@@ -21,6 +21,7 @@ const checkPresence = async (page, { targetSelector, xpath, onCheckFail, stepId,
       case ACTION_RESULT_JUMP:
         return createActionResultJump(stepId);
       case ACTION_RESULT_END:
+      default:
         return createActionResultEnd();
     }
   }

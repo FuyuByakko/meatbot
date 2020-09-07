@@ -98,4 +98,12 @@ describe("checkPresence Action", () => {
     });
     expect(result.result).toEqual(ACTION_RESULT_END);
   });
+
+  test("should end script execution if check fails and no onCheckFail provided", async () => {
+    const result = await checkPresence(page, {
+      targetSelector: 'a.element',
+      invert: true
+    });
+    expect(result.result).toEqual(ACTION_RESULT_END);
+  });
 })
