@@ -108,7 +108,7 @@ Will set the selected text into the chosen element.
 * *`xpath: <String>` - valid XPATH for the element that needs to be clicked. 
 * *`text: <String>` - text content to be written. 
 * `specialKey: <String>` - name of additional special key input (for ex. 'Enter').<br>
-  examples: https://github.com/puppeteer/puppeteer/blob/v5.2.1/src/common/USKeyboardLayout.ts
+  [Special key examples](https://github.com/puppeteer/puppeteer/blob/v5.2.1/src/common/USKeyboardLayout.ts)
 * `delay: <Integer>` - timeout in ms between every input event (letter) of the text. 
 
 <br>
