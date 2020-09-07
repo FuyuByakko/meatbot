@@ -13,7 +13,7 @@ const get = async (page, { targetSelector, xpath }) => {
 			if (xpath) {
 				elementHandles = await page.$x(xpath);
 			}
-			if (elementHandles) {
+			if (elementHandles && elementHandles.length > 0) {
 				result = await Promise.all(elementHandles.map(element => element.evaluate(e =>e.innerText)));
 			}
     } catch (error) {

@@ -34,13 +34,25 @@ describe('GET Action', () => {
     const expectedResult = []
     const result = await get(page, { targetSelector: '', keyName: 'key1' });
     expect(result.data).toEqual(expectedResult);
-    const result2 = await get(page, { targetSelector: 'invalidSelecotr', keyName: 'key2' });
+    const result2 = await get(page, { targetSelector: 'invalidSelector', keyName: 'key2' });
     expect(result2.data).toEqual(expectedResult);
+  });
+
+  test('should return an empty array if an invalid xpath is given', async () => {
+    const expectedResult = []
+    const result = await get(page, { xpath: '//[@class="hello"]', keyName: 'key1' });
+    expect(result.data).toEqual(expectedResult);
   });
 
   test('should return an epty array when selector is not found', async () => {
     const expectedResult = []
     const result = await get(page, { targetSelector: 'h4', keyName: 'key' });
+    expect(result.data).toEqual(expectedResult);
+  });
+
+  test('should return an epty array when xpath is not found', async () => {
+    const expectedResult = []
+    const result = await get(page, { xpath: '//h4', keyName: 'key' });
     expect(result.data).toEqual(expectedResult);
   });
 
