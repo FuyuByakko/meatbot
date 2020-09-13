@@ -1,6 +1,6 @@
 const { createActionResultRepeat } = require('../lib/resultActions');
 
-const repeat = (_page, { next, stepId, times }) => {
+const repeat = (_page, { next, stepId, times, resumeFromLoopEnd }) => {
 	const loopInfo = {}	
 	loopInfo.times = 1;
 
@@ -8,12 +8,16 @@ const repeat = (_page, { next, stepId, times }) => {
 		loopInfo.times = times
 	}
 	
-	if (stepId) {
-		loopInfo.stepId = stepId;
-  } else if (!next || (next && next <= 0)) {
-		loopInfo.next = 1;
-	} else {
-		loopInfo.next = next;
+	loopInfo.stepId = stepId;
+	loopInfo.next = next;
+	
+	if (!next || (next && next <= 0)) {
+	loopInfo.next = 1;
+	}
+	
+	loopInfo.resumeFromLoopEnd = false;
+	if (resumeFromLoopEnd) {
+		loopInfo.resumeFromLoopEnd = resumeFromLoopEnd;
 	}
 
   return createActionResultRepeat(loopInfo);
