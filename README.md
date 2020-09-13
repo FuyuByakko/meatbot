@@ -201,24 +201,30 @@ Pause the execution of the script for a set amount of time before next step.
 
 >`REPEAT`
 
-TBA - Repeat a certain action (or several next actions a selected number of times)
+Repeat a certain action (or several next actions a selected number of times)
 ```
 {
   type: 'repeat',
+  stepId: <id of action>,
   next: <number of actions>,
-  id: <id of action>,
   times: <number of repeats>,
-  delayTimer: <delay in ms>
+  resumeFromLoopEnd: <bool>,
 },
 ```
-TO BE IMPLEMENTED:
-* *`next: <Integer: number of actions>` - number of next actions to be repeated.
-* *`id: <String: id name>` - id name of action to be repeated.<br>
-  If `id` is provided, the `next` parameter is ignored. 
-* *`times: <Integer: number of repeats>` - number of total repeats.
-* `delayTimer: <Integer>` - timeout in ms between each full repetition. 
+* *`stepId: <String: id name>` - id name of action to be repeated.<br>
+  If repeating several actions, servers as the starting point.<br>
+  If not provided, by default, next action in list will be taken as starting point.
+* *`next: <Integer: number of actions>` - number of next actions to be repeated.<br>
+  If not provided, defaults to 1 item.<br>
+  If used together with `stepId`, the designated starting starting action is included in the next count. 
+* *`times: <Integer: number of repeats>` - number of total repeats.<br>
+  If not provided defaults to 1 repetition.
+* `resumeFromLoopEnd: <boolean>` - defaults to `false`. Used together with `stepId`.<br>
+  When `false`, after finishing Repeat at the set stepID, will resume execution from the next step after REPEAT declaration.<br>
+  If set to `true`, after finishing the REPEAT, script execution will continue from where the script ended.
 
-
+**Currently doesn't work well with nested REPEATs**
+**It is possible to break out of the loop prematurely, by adding a CHECK PRESENCE with a JUMP parameter targeted to a step outside of the said loops.**
 ***
 
 ## **Tech and Dev**:
