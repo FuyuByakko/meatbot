@@ -223,7 +223,6 @@ Repeat a certain action (or several next actions a selected number of times)
   When `false`, after finishing Repeat at the set stepID, will resume execution from the next step after REPEAT declaration.<br>
   If set to `true`, after finishing the REPEAT, script execution will continue from where the script ended.
 
-**Currently doesn't work well with nested REPEATs**
 **It is possible to break out of the loop prematurely, by adding a CHECK PRESENCE with a JUMP parameter targeted to a step outside of the said loops.**
 ***
 
