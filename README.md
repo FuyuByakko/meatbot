@@ -2,8 +2,10 @@
 
 ### A script runner to automate browsing and getting content from webpages.
 
-### Optimized to work with getting online tickets to a Japanese Yakiniku store, but can be utilized to run any script on most pages.
-### (Single page, dynamic pages are not  yet fully supperted, but can be circumvented by using delays :) ) 
+#### The original purpose was to automate taking online tickets to a Japanese Yakiniku store.
+#### The idea then further grew and developed, so that it can now be utilized to run any script on most pages.
+
+#### (Single page apps, dynamic pages are not  yet fully supported, but can be circumvented by using delays (DELAY or Check presence) :) ) 
 
 ***
 
@@ -48,7 +50,7 @@
 ### **Action Descriptions**
 >**Notices**:
 - Any action supports an `id` parameter that can be used in `CHECK PRESENSE` or `REPEAT`
-> `{ id: 'gotoDesiredPage', type: 'goto', destination: 'www.google.com' },
+> `{ id: 'gotoDesiredPage', type: 'goto', destination: 'www.google.com' }`,
 
 - All actions taking a target selector or xpath, will default to xpath if provided with both.
 
@@ -122,12 +124,14 @@ Retrieve the content of the chosen selector or xpath and save it.
   targetSelector: <CSS Selector>,
   xpath: <xpath>,
   keyName: <key Name>,
+  description: <Optional note>,
   overwrite: <bool>
 }
 ```
 * *`targetSelector: <String>` - valid CSS selector that will be clicked.
 * *`xpath: <String>` - valid XPATH for the element that needs to be clicked. 
 * *`keyName: <String>` - a string to act as the key name for the saved data Map.
+* `description: <String>` - Note for what is being checked.
 TO BE IMPLEMENTED:
 * `overwrite: <boolean>` - defaults to `true`.<br>
   When true, if key matches one that already exists, data (value) for that key will be overwritten.
@@ -156,9 +160,10 @@ Check the presense of a WANTED element, or absense of a non-desired element.
   If set to `false`, action SUCCEEDS, when the target element is present.<br>
   If set to `true`, action SUCCEEDS, when the target element is not found.
 * *`onCheckFail: <String>` - select an the next action to be performed if CHECK PRESENSE FAILS.<br>
-  Defaults to `'end'`. This terminates the further execution of the script.<br> 
   Options:
+  `'end'`. This terminates the further execution of the script.<br> 
   `'jump'` - jump to the action with the ID specified in `stepId`
+  Defaults to `'end'`
 * `stepId: <String>` - The ID name of the action for the `jump` target. Required for `jump`.
   See Notices *1
 
@@ -177,7 +182,7 @@ Check the presense of a WANTED element, or absense of a non-desired element.
       ...
     ]
   }
-  // Since the Google toppage does not have a div with such a class, above checkPresense Fails.
+  // Since the Google top page does not have a div with such a class, above checkPresense Fails.
   // It then calls a jump to the action with id `NavigateToGoogle`.
   // This runs the first action again and proceeds to the next action.
   // checkPresence fails once again. The result is an infinite loop.
@@ -201,7 +206,7 @@ Pause the execution of the script for a set amount of time before next step.
 
 >`REPEAT`
 
-Repeat a certain action (or several next actions a selected number of times)
+Repeat a certain action (or several sequential actions a selected number of times)
 ```
 {
   type: 'repeat',
@@ -209,19 +214,21 @@ Repeat a certain action (or several next actions a selected number of times)
   next: <number of actions>,
   times: <number of repeats>,
   resumeFromLoopEnd: <bool>,
+  description: <Optional note>,
 },
 ```
 * *`stepId: <String: id name>` - id name of action to be repeated.<br>
-  If repeating several actions, servers as the starting point.<br>
-  If not provided, by default, next action in list will be taken as starting point.
-* *`next: <Integer: number of actions>` - number of next actions to be repeated.<br>
+  If repeating several actions - becomes the starting point of the loop.<br>
+  If not provided, by default, the next action in list will be taken as starting point.
+* *`next: <Integer: number of actions>` - number of sequential actions to be repeated.<br>
   If not provided, defaults to 1 item.<br>
   If used together with `stepId`, the designated starting starting action is included in the next count. 
-* *`times: <Integer: number of repeats>` - number of total repeats.<br>
+* *`times: <Integer: number of repeats>` - number of total repetitions.<br>
   If not provided defaults to 1 repetition.
 * `resumeFromLoopEnd: <boolean>` - defaults to `false`. Used together with `stepId`.<br>
-  When `false`, after finishing Repeat at the set stepID, will resume execution from the next step after REPEAT declaration.<br>
-  If set to `true`, after finishing the REPEAT, script execution will continue from where the script ended.
+  When `false`, after finishing the REPEAT loop, script execution will resume from the action after the REPEAT declaration.<br>
+  If set to `true`, after finishing the REPEAT loop, script execution will continue from where the loop ended.
+* `description: <String>` - Note for what is being checked.
 
 **It is possible to break out of the loop prematurely, by adding a CHECK PRESENCE with a JUMP parameter targeted to a step outside of the said loops.**
 ***
@@ -244,8 +251,8 @@ to start work:
 
 ## Next Steps:
 
+- [x] Implement REPEAT action
 - [ ] Add support for scripts passed in json format
-- [ ] Implement REPEAT action
 - [ ] create a handler for non cli requests
 - [ ] setup AWS lambda to run the script
 - [ ] setup AWS lambda to read scripts from S3 ?
