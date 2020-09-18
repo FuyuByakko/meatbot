@@ -12,7 +12,8 @@ program.version('0.0.1')
     const scriptRunner = await createScriptRunner();
     const result = await scriptRunner(script);
     if (result && result.size && result.size() > 0) {
-      const printData = (key, value) => { console.log(`${key}:${value}`)};
+      console.log('\nSTORAGE CONTENT:')
+      const printData = (key, value) => { console.log(`* ${key}: ${value}`)};
       result.each(printData);
     }
     await endScriptRunner();
