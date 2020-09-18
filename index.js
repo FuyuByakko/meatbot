@@ -11,10 +11,9 @@ program.version('0.0.1')
     const script = require(`./scripts/${file}`);
     const scriptRunner = await createScriptRunner();
     const result = await scriptRunner(script);
-    if (result instanceof Map) {
-      for (const [key, value] of result.entries()) {
-        console.log(`${key}:${value}`);
-      }
+    if (result && result.size && result.size() > 0) {
+      const printData = (key, value) => { console.log(`${key}:${value}`)};
+      result.each(printData);
     }
     await endScriptRunner();
   });
