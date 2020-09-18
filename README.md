@@ -252,8 +252,9 @@ to start work:
 
 - [x] Implement REPEAT action
 - [x] add overwrite true/false to GET action
-- [ ] Add support for scripts passed in json format
+- [x] Add support for scripts passed in json format (for CLI)
 - [ ] create a handler for non cli requests
+- [ ] Add support for scripts passed in json format (for request handler)
 - [ ] setup AWS lambda to run the script
 - [ ] setup AWS lambda to read scripts from S3 ?
 - [ ] integrate lambda call with slack bot
