@@ -132,7 +132,6 @@ Retrieve the content of the chosen selector or xpath and save it.
 * *`xpath: <String>` - valid XPATH for the element that needs to be clicked. 
 * *`keyName: <String>` - a string to act as the key name for the saved data Map.
 * `description: <String>` - Note for what is being checked.
-TO BE IMPLEMENTED:
 * `overwrite: <boolean>` - defaults to `true`.<br>
   When true, if key matches one that already exists, data (value) for that key will be overwritten.
   if set to `false`, data will take the providedKey as Base and generate a new key.
@@ -252,6 +251,7 @@ to start work:
 ## Next Steps:
 
 - [x] Implement REPEAT action
+- [x] add overwrite true/false to GET action
 - [ ] Add support for scripts passed in json format
 - [ ] create a handler for non cli requests
 - [ ] setup AWS lambda to run the script
