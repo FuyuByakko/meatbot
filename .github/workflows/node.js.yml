@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, test ]
   pull_request:
     branches: [ master ]
 
@@ -27,3 +27,44 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+  
+  pack:
+          
+    needs: build
+          
+    runs-on: ubuntu-latest
+      
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build zip
+        run: |
+          mkdir lambda-content
+          cp -r ./actions lambda-content/actions
+          cp -r ./lib lambda-content/lib
+          cp ./lambda-handler.js lambda-content/lambda-handler.js
+          cp ./package.json lambda-content/package.json
+          var=$(date +"%FORMAT_STRING")
+          now=$(date +"%m_%d_%Y_%H_%M")
+          today=$(date +"%Y-%m-%d-%H-%M")
+          mkdir source
+          fileName="${today}-meatbot-source.zip"
+          zip -r ./source/${fileName} lambda-content
+          echo "${fileName} created!"
+      
+      - name: Upload to S3
+        shell: bash
+        env:
+          aws_key_id: ${{ secrets.AWS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_s3_bucket: ${{ secrets.AWS_BUCKET }}
+          destination_dir: ${{ secrets.AWS_BUCKET_DESTINATION }}
+        run: |
+          sudo apt-get update && sudo apt-get -y install awscli
+          aws configure set aws_access_key_id $aws_key_id
+          aws configure set aws_secret_access_key $aws_secret_access_key 
+          aws configure set default.region ap-northeast-1
+          aws s3 cp ./source/ s3://$aws_s3_bucket/$destination_dir/ --recursive
+        
+      - name: Cleanup
+        run: rm -rf lambda-content source 
