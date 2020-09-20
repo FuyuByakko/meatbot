@@ -35,7 +35,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Packaging Lambda
     - run: mkdir lambda-content
     - run: cp -r ./actions lambda-content/actions
     - run: cp -r ./lib lambda-content/lib
