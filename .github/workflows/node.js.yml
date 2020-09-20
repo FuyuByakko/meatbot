@@ -35,8 +35,9 @@ jobs:
     runs-on: ubuntu-latest
       
     steps:
+      - uses: actions/checkout@v2
+
       - name: Build zip
-        uses: actions/checkout@v2
         run: |
           mkdir lambda-content
           cp -r ./actions lambda-content/actions
@@ -50,6 +51,7 @@ jobs:
           mkdir source
           zip -r ./source/${today}-meatbot-source.zip lambda-content
           echo "$today zip created!"
+      
       -name: Upload to S3
         uses: shallwefootball/s3-upload-action@master
         with:
