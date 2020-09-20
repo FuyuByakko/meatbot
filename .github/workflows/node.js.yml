@@ -46,12 +46,11 @@ jobs:
           cp ./package.json lambda-content/package.json
           var=$(date +"%FORMAT_STRING")
           now=$(date +"%m_%d_%Y_%H_%M")
-          printf "%s\n" $now
           today=$(date +"%Y-%m-%d-%H-%M")
           mkdir source
-          fileName=${today}-meatbot-source.zip
+          fileName="${today}-meatbot-source.zip"
           zip -r ./source/${fileName} lambda-content
-          echo "$today zip created!"
+          echo "$fileName zip created!"
       
       - name: Upload to S3
         shell: bash
