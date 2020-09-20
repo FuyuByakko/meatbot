@@ -60,4 +60,6 @@ jobs:
           aws_bucket: ${{ secrets.AWS_BUCKET }}
           source_dir: ./source/
           destination_dir: ${{ secrets.AWS_BUCKET_DESTINATION }}
+      
+      - name: Cleanup
         run: rm -rf lambda-content source 
