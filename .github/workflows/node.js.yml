@@ -42,15 +42,13 @@ jobs:
     - run: cp ./lambda-handler.js lambda-content/lambda-handler.js
     - run: cp ./package.json lambda-content/package.json
     - run: |
-      var=$(date +"%FORMAT_STRING") && now=$(date +"%m_%d_%Y_%H_%M") && printf "%s\n" $now && today=$(date +"%Y-%m-%d-%H-%M")
-    - run: |
-      zip -r ${today}-meatbot-source.zip lambda-content
+      var=$(date +"%FORMAT_STRING") && now=$(date +"%m_%d_%Y_%H_%M") && printf "%s\n" $now && today=$(date +"%Y-%m-%d-%H-%M") && mkdir source && zip -r ./source/${today}-meatbot-source.zip lambda-content
     - run: echo "$today zip created!"
     - uses: shallwefootball/s3-upload-action@master
       with:
         aws_key_id: ${{ secrets.AWS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
         aws_bucket: ${{ secrets.AWS_BUCKET }}
-        source_dir: ./lambda-content/
+        source_dir: ./source/
         destination_dir: ${{ secrets.AWS_BUCKET_DESTINATION }}
-    - run: rm -rf lambda-content 
+    - run: rm -rf lambda-content source 
