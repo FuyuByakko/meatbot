@@ -1,4 +1,6 @@
 const input = async (page, {targetSelector, xpath, text, specialKey, delay}) => {
+
+  //TODO - potentially add waitFofNavigation ( as for ex. SpecialKey 'Enter' can cause form submit)
   try {
     let elementHandle;
 

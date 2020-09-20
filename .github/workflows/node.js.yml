@@ -27,3 +27,20 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+  
+  pack:
+
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Packaging Lambda
+    - run: mkdir lambda-content
+    - run: cp -r ./actions lambda-content/actions
+    - run: cp -r ./lib lambda-content/lib
+    - run: cp ./lambda-handler.js lambda-content/lambda-handler.js
+    - run: cp ./package.json lambda-content/package.json
+    - run: zip -r meatbot.zip lambda-content
+    - run: echo "zip created!"
+    - run: rm -rf lambda-content 
