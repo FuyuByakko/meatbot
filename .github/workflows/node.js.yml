@@ -24,22 +24,31 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
-  
+        - run: npm ci
+        - run: npm run build --if-present
+        - run: npm test
+        
   pack:
-
+          
     needs: build
-
+          
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [12.x]
+      
     steps:
-    - run: mkdir lambda-content
-    - run: cp -r ./actions lambda-content/actions
-    - run: cp -r ./lib lambda-content/lib
-    - run: cp ./lambda-handler.js lambda-content/lambda-handler.js
-    - run: cp ./package.json lambda-content/package.json
-    - run: zip -r meatbot.zip lambda-content
-    - run: echo "zip created!"
-    - run: rm -rf lambda-content 
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        - run: mkdir lambda-content
+        - run: cp -r ./actions lambda-content/actions
+        - run: cp -r ./lib lambda-content/lib
+        - run: cp ./lambda-handler.js lambda-content/lambda-handler.js
+        - run: cp ./package.json lambda-content/package.json
+        - run: zip -r meatbot.zip lambda-content
+        - run: echo "zip created!"
+        - run: rm -rf lambda-content 
