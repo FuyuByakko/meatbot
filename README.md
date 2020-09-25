@@ -250,11 +250,26 @@ to start work:
 
 ## Next Steps:
 
+### General TODOS
 - [x] Implement REPEAT action
 - [x] add overwrite true/false to GET action
+- [ ] set standarts on errors (ones that break execution or try to continue (get, click, etc))
+
+### CLI TODOS
 - [x] Add support for scripts passed in json format (for CLI)
-- [ ] create a handler for non cli requests
+- [x] Add running scripts from S3 (saves script locally)
+- [x] Add script uploading to AWS S3.<br>
+  `node index.js scripts [U|upload] filename`<br>
+  Filename must have extension.
+- [x] Add script downloading from S3<br>
+  `node index.js scripts [D|download] filename`<br>
+  Filename must have extension.
+- [ ] Create executable
+
+### LAMBDA TODOS
+- [x] create a handler for non cli requests
+- [x] setup AWS lambda to run the script
+- [x] setup AWS lambda to read scripts from S3 ?
 - [ ] Add support for scripts passed in json format (for request handler)
-- [ ] setup AWS lambda to run the script
-- [ ] setup AWS lambda to read scripts from S3 ?
+- [ ] create deployment method (Cloudfront? SAM?)
 - [ ] integrate lambda call with slack bot

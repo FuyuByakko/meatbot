@@ -43,13 +43,10 @@ jobs:
           cp -r ./actions lambda-content/actions
           cp -r ./lib lambda-content/lib
           cp ./lambda-handler.js lambda-content/lambda-handler.js
-          cp ./package.json lambda-content/package.json
-          var=$(date +"%FORMAT_STRING")
-          now=$(date +"%m_%d_%Y_%H_%M")
           today=$(date +"%Y-%m-%d-%H-%M")
           mkdir source
           fileName="${today}-meatbot-source.zip"
-          zip -r ./source/${fileName} lambda-content
+          zip -r ./source/${fileName} lambda-content --exclude=*fixtures/* --exclude=*.test.js*
           echo "${fileName} created!"
       
       - name: Upload to S3
