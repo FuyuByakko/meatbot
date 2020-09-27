@@ -1,4 +1,4 @@
-const input = async (page, {targetSelector, xpath, text, specialKey, delay}) => {
+const input = async (page, {targetSelector, xpath, text, specialKey, delay, waitForNavigation = false}) => {
 
   //TODO - potentially add waitFofNavigation ( as for ex. SpecialKey 'Enter' can cause form submit)
   try {
@@ -21,9 +21,16 @@ const input = async (page, {targetSelector, xpath, text, specialKey, delay}) => 
 
     await elementHandle.type(text, {delay: delay});
     
+    const specialTasks = []
     if (specialKey) {
-      await elementHandle.press(specialKey);
+      specialKeyPress = elementHandle.press(specialKey);
+      specialTasks.push(specialKey);
     }
+    if (waitForNavigation) {
+      specialTasks.push(page.waitForNavigation();
+    }
+    await Promise.all(specialTasks);
+
   } catch (error) {
     console.error(error.message);
     throw error;
