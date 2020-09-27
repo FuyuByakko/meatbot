@@ -31,11 +31,32 @@
   <br>
 
   > ### server mode
-  ```javascript
-  TBA
+  Currently the setup was done by hand.<br>
+  TODO: Automate creation of event creators (cloudwatch events, API Gateway)
+  ```bash
+  //Run the following binary to package the lambda only data into a zip
+  ./bin/package
   ```
+  TODO: Add make it run on windows
 
-  <br>
+  Deploy the zip as your lambda (directly via aws-cli, aws console (s3 or upload)<br>
+  TODO: Create automatic deployment method
+
+  The Lambda handler expects an event of the following format:
+  ```javascript
+  {
+	  name: String,
+	  script: Object,
+	  save: Boolean
+  }
+  ```
+  `name` - name of the script that is present in the designated S3 bucket/folder.<br>
+  `script` - a script to be called, passed in the request.<br>
+    If both `script` and `name` are present, `script` will take precedence and be run.<br>
+  `save` - if set to `true`, if the script completes successfully, it will save the script to S3.<br>
+    Please note, both `name` and `script` are required to save!
+
+  Examples can be found in `test-lambda.js`.
 
   > ### Running environment
   Include the following data into the environment to use some of the functionality.<br>
@@ -44,23 +65,23 @@
   Alternatively, update the envConfigGenerator in the lib directory.
   ```javascript
   //GENERAL
-  BROWSER_HEADLESS=false //Run browser as non-headless (actually see pages opening)
+  BROWSER_HEADLESS=false 
+  //Run browser as non-headless (actually see pages opening)
   //this can be also be achieved by adding a "non-headless" argument in the cli
 
   //AWS S3
-  S3_BUCKET=example-bucket-name //Name of the S3 bucket where you will store your scripts
-  S3_SCRIPT_DIR=scripts //Name of the directory inside the Bucket where you want to store your scripts
-  
-  S3_MEATBOT_VERSION_DIR=example-source-folder-name //Name of directory where you wnat to save the Lambda function bundle version
-  //used in github as a secret to automatically upload
+  //Name of the S3 bucket where you will store your scripts
+  S3_BUCKET=example-bucket-name
+  //Name of the directory inside the Bucket where you want to store your scripts
+  S3_SCRIPT_DIR=scripts
   
   //AWS GENERAL
   //Following info can be provided in an env file.
   AWS_REGION=ap-northeast-1
   AWS_ACCESS_KEY_ID=THE_KEY_VALUE_FOR_AWS_USER
   AWS_SECRET_ACCESS_KEY=THE_SECRET_KEY_ASSOCIATED_WITH_THE_ACCESS_KEY
-  //If aws cli is installed, it will also pick up the credentials from the aws credentials default file or set global enviroment
-  //Ensure that above credentials are allowed access to the needed resources.
+  //Can also picked up the credentials from the aws credentials default file or set global enviroment
+  //Ensure that the credentials are allowed access to the needed resources.
    ```
 
   <br>
@@ -88,7 +109,7 @@
 
 <br>
 
->`GOTO`
+>**`GOTO`**
 
 Will navigate the page to the given destination.
 ```
@@ -105,7 +126,7 @@ Will navigate the page to the given destination.
 
 <br>
 
->`CLICK`
+>**`CLICK`**
 
 Clicks the element that matches the given selector or xpath. In case of several matches will click the first match.
 ```
@@ -123,7 +144,7 @@ Clicks the element that matches the given selector or xpath. In case of several 
 
 <br>
 
->`INPUT`
+>**`INPUT`**
 
 Will set the selected text into the chosen element.
 ```
@@ -148,7 +169,7 @@ Will set the selected text into the chosen element.
 
 <br>
 
->`GET`
+>**`GET`**
 
 Retrieve the content of the chosen selector or xpath and save it.
 ```
@@ -171,7 +192,7 @@ Retrieve the content of the chosen selector or xpath and save it.
 
 <br>
 
->`CHECK PRESENSE`
+>**`CHECK PRESENSE`**
 
 Check the presense of a WANTED element, or absense of a non-desired element.
 ```
@@ -222,7 +243,7 @@ Check the presense of a WANTED element, or absense of a non-desired element.
 
 <br>
 
->`DELAY`
+>**`DELAY`**
 
 Pause the execution of the script for a set amount of time before next step.
 ```
@@ -236,7 +257,7 @@ Pause the execution of the script for a set amount of time before next step.
 <br>
 
 
->`REPEAT`
+>**`REPEAT`**
 
 Repeat a certain action (or several sequential actions a selected number of times)
 ```
@@ -301,11 +322,17 @@ to start work:
   `node index.js scripts [L|list]`<br>
   https://grokonez.com/aws/amazon-s3/angular-6-node-js-amazon-s3-upload-files-download-files-list-files-using-express-restapi-multer-aws-sdk
 - [ ] Create executable
+- [ ] Refactor how optional params are handled
 
-### LAMBDA TODOS
+### LAMBDA/API TODOS
 - [x] create a handler for non cli requests
 - [x] setup AWS lambda to run the script
-- [x] setup AWS lambda to read scripts from S3 ?
-- [ ] Add support for scripts passed in json format (for request handler)
+- [x] setup AWS lambda to read scripts from S3
+- [x] allow AWS lambda to save scripts to S3
+- [x] setup AWS API gateway to run lambda
+- [x] setup AWS API gateway to only lambda if proper  request body was received
+- [x] create some restrictions to API gateway (api-key, throttling)
+- [ ] setup proper API use restrictions (users) ??
+- [x] Add support for scripts passed in json format (for request handler)
 - [ ] create deployment method (Cloudfront? SAM?)
 - [ ] integrate lambda call with slack bot
