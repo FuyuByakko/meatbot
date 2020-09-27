@@ -1,0 +1,15 @@
+#!/bin/bash
+
+mkdir lambda-content
+mkdir lambda-content/scripts
+cp -r ./actions lambda-content
+cp -r ./lib lambda-content
+cp ./lambda-handler.js lambda-content/lambda-handler.js
+today=$(date +"%Y-%m-%d-%H-%M")
+fileName="${today}-meatbot-source.zip"
+mkdir source
+cd lambda-content
+zip -r ../source/${fileName} . --exclude=*fixtures/* --exclude=*.test.js*
+echo "${fileName} created!"
+cd ..
+rm -rf lambda-content
