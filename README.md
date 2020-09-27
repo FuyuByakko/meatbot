@@ -38,9 +38,10 @@
   <br>
 
   > ### Running environment
-  Include the following data into the environment to use some of the functionality.
-  Examples are given, but make sure to add you own names!
-  Create a .env file in the root directory, with the following values.
+  Include the following data into the environment to use some of the functionality.<br>
+  Examples are given, but make sure to add you own names!<br>
+  Create a .env file in the root directory, with the following values.<br>
+  Alternatively, update the envConfigGenerator in the lib directory.
   ```javascript
   //GENERAL
   BROWSER_HEADLESS=false //Run browser as non-headless (actually see pages opening)

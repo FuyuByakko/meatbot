@@ -1,10 +1,13 @@
 const dotenv = require('dotenv');
+const { envConfigCreate }  = require('./lib/envConfigGenerator')
 const { program } = require('commander');
 const { createScriptRunner, endScriptRunner } = require('./lib/scriptRunner');
 const { getScript } = require('./lib/readScript');
 const { saveScriptToS3, getScriptFromS3 } = require('./lib/aws');
 
 dotenv.config();
+const inLambda = false;
+envConfigCreate(inLambda);
 
 program.version('0.0.1')
   .command('run <file> [options...]')

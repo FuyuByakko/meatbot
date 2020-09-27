@@ -1,7 +1,10 @@
 const { createScriptRunner, endScriptRunner } = require('./lib/scriptRunner');
+const { envConfigCreate }  = require('./lib/envConfigGenerator')
 const { getScript } = require('./lib/readScript');
+const { saveScriptToS3 } = require('./lib/aws');
 
-const LAMBDA_ENV = true;
+const inLambda = true;
+envConfigCreate(inLambda);
 
 //context and callback are not required now but left if for the function def
 exports.handler = async (event, context, callback) => {
@@ -14,9 +17,15 @@ exports.handler = async (event, context, callback) => {
 		//else will try to find a loaded script in the S3
 		const scriptContents = await getScriptContents(name, script);
 		
-		const scriptRunner = await createScriptRunner(LAMBDA_ENV);
+		const scriptRunner = await createScriptRunner();
 		
-    const result = await scriptRunner(scriptContents);
+		const result = await scriptRunner(scriptContents);
+		
+		//if script succeeds, async save given script to S3
+		if(save) {
+			saveScriptToS3(name, script);
+		}
+
     if (result && result.size && result.size() > 0) {
 			//TODO: Remove the printing of data??
 			console.log('\nSTORAGE CONTENT:')
@@ -54,7 +63,9 @@ async function getScriptContents(receivedName, receivedScript) {
 		contents = receivedScript;
 		console.log(`Running received script.`);
 	} else {
-		contents = await getScript(receivedName, LAMBDA_ENV);
+		//get file from S3 in case of lambda
+		const fromS3 = true;
+		contents = await getScript(receivedName, fromS3);
 		console.log(`Running ${receivedName}`);
 	}
 
