@@ -1,3 +1,5 @@
+![Test, and save to S3](https://github.com/FuyuByakko/meatbot/workflows/Test,%20and%20save%20to%20S3/badge.svg?branch=master)
+
 # **Meatbot**
 
 ### A script runner to automate browsing and getting content from webpages.
