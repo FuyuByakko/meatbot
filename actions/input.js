@@ -24,7 +24,7 @@ const input = async (page, {targetSelector, xpath, text, specialKey, delay, wait
     const specialTasks = []
     if (specialKey) {
       specialKeyPress = elementHandle.press(specialKey);
-      specialTasks.push(specialKey);
+      specialTasks.push(specialKeyPress);
     }
     if (waitForNavigation) {
       specialTasks.push(page.waitForNavigation());
