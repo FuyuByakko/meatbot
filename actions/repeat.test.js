@@ -1,5 +1,3 @@
-const browserInstance = require('../lib/browser');
-const path = require('path');
 const checkPresence = require('./checkPresence');
 const {
   ACTION_RESULT_REPEAT,

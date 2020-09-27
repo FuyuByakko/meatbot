@@ -1,4 +1,4 @@
-const browserInstance = require('../lib/browser');
+const { createBrowser: browserInstance } = require('../lib/browser');
 const path = require('path');
 const checkPresence = require('./checkPresence');
 const {
@@ -11,21 +11,45 @@ describe("checkPresence Action", () => {
   let page;
 
   beforeAll(async () => {
-    browser = await browserInstance()
+    try {
+      browser = await browserInstance()
+    } catch (error) {
+      throw(error)
+    }
   });
-
+  
   afterAll(async () => {
-    await browser.close();
+    try {
+      if (browser) {
+        await browser.close();
+      } else {
+        throw(new Error('No browser instance found'));
+      }
+    } catch (error) {
+      throw(error)
+    }
   })
 
   beforeEach(async () => {
-    page = await browser.newPage();
-    const newURL = `${path.join('file:', __dirname,'fixtures', 'check-presence.html')}`
-    await page.goto(newURL);
+    try {
+      page = await browser.newPage();
+      const newURL = `${path.join('file:', __dirname,'fixtures', 'check-presence.html')}`
+      await page.goto(newURL);
+    } catch (error) {
+      throw(error)
+    }
   });
 
   afterEach(async () => {
-    await page.close()
+    try {
+      if (page) {
+        await page.close()
+      } else {
+        throw(new Error('No browser instance found'));
+      }
+    } catch (error) {
+      throw(error)
+    }
   });
 
   test("should exist", () => {

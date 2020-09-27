@@ -27,7 +27,7 @@ const input = async (page, {targetSelector, xpath, text, specialKey, delay, wait
       specialTasks.push(specialKey);
     }
     if (waitForNavigation) {
-      specialTasks.push(page.waitForNavigation();
+      specialTasks.push(page.waitForNavigation());
     }
     await Promise.all(specialTasks);
 
