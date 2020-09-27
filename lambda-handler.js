@@ -49,11 +49,10 @@ exports.handler = async (event, context, callback) => {
 		}
   }
 
-	//NEEDS to return a JSON formatted string
-  return JSON.stringify({
-		statusCode: statusCode,
+  return {
+	  statusCode: statusCode,
 		body: resultObj
-	})
+	}
 };
 
 async function getScriptContents(receivedName, receivedScript) {
