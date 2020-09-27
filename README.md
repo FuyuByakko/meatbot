@@ -16,6 +16,15 @@
   > ### CLI mode
   ```javascript
   npm run cli <script>  //provide the name of the script inside the "scripts" folder
+  npm run cli <script> S3 //checks your S3 bucket for the desired script. See Environment for required info.
+  //If found, downloads it inso the local scripts folder and runs it.
+  npm run cli <script> non-headless //forces browser to run non-headless (opening the browser).
+  //can be set automatically through environment variables.
+
+  //TEMPORARY
+  node index.js scripts U|upload <script> //uploads a specified script in the scripts folder into your S3
+  node index.js scripts D|download <script> //downloads a script from S3 into your scripts folder
+  //<scrip> should include the full name with the extension!
   ```
   Example 'mdn' script can be used for some simple actions.
 
@@ -28,10 +37,30 @@
 
   <br>
 
-  > ### Run browser as non-headless (actually see pages opening)
+  > ### Running environment
+  Include the following data into the environment to use some of the functionality.
+  Examples are given, but make sure to add you own names!
+  Create a .env file in the root directory, with the following values.
   ```javascript
-  //create a .env file in the root directory and add `BROWSER_HEADLESS=false`
-  ```
+  //GENERAL
+  BROWSER_HEADLESS=false //Run browser as non-headless (actually see pages opening)
+  //this can be also be achieved by adding a "non-headless" argument in the cli
+
+  //AWS S3
+  S3_BUCKET=example-bucket-name //Name of the S3 bucket where you will store your scripts
+  S3_SCRIPT_DIR=scripts //Name of the directory inside the Bucket where you want to store your scripts
+  
+  S3_MEATBOT_VERSION_DIR=example-source-folder-name //Name of directory where you wnat to save the Lambda function bundle version
+  //used in github as a secret to automatically upload
+  
+  //AWS GENERAL
+  //Following info can be provided in an env file.
+  AWS_REGION=ap-northeast-1
+  AWS_ACCESS_KEY_ID=THE_KEY_VALUE_FOR_AWS_USER
+  AWS_SECRET_ACCESS_KEY=THE_SECRET_KEY_ASSOCIATED_WITH_THE_ACCESS_KEY
+  //If aws cli is installed, it will also pick up the credentials from the aws credentials default file or set global enviroment
+  //Ensure that above credentials are allowed access to the needed resources.
+   ```
 
   <br>
 
@@ -104,6 +133,7 @@ Will set the selected text into the chosen element.
   text: <text content>,
   specialKey: <key name>,
   delay: <delay in ms>
+  waitForNavigation: <bool>
 },
 ```
 * *`targetSelector: <String>` - valid CSS selector that will be clicked.
@@ -112,6 +142,8 @@ Will set the selected text into the chosen element.
 * `specialKey: <String>` - name of additional special key input (for ex. 'Enter').<br>
   [Special key examples](https://github.com/puppeteer/puppeteer/blob/v5.2.1/src/common/USKeyboardLayout.ts)
 * `delay: <Integer>` - timeout in ms between every input event (letter) of the text. 
+* `waitForNavigation: <boolean>` - if click results in navigation to new page, wait for it to end.
+  Defaults to `false`. 
 
 <br>
 
@@ -264,6 +296,9 @@ to start work:
 - [x] Add script downloading from S3<br>
   `node index.js scripts [D|download] filename`<br>
   Filename must have extension.
+- [ ] Add script showing all available scripts in S3<br>
+  `node index.js scripts [L|list]`<br>
+  https://grokonez.com/aws/amazon-s3/angular-6-node-js-amazon-s3-upload-files-download-files-list-files-using-express-restapi-multer-aws-sdk
 - [ ] Create executable
 
 ### LAMBDA TODOS
