@@ -1,7 +1,6 @@
 #!/bin/bash
 
 mkdir lambda-content
-mkdir lambda-content/scripts
 cp -r ./actions lambda-content
 cp -r ./lib lambda-content
 cp ./lambda-handler.js lambda-content/lambda-handler.js
