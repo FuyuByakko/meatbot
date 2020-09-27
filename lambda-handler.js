@@ -1,20 +1,24 @@
 const { createScriptRunner, endScriptRunner } = require('./lib/scriptRunner');
+const { getScript } = require('./lib/readScript');
 
+const LAMBDA_ENV = true;
+
+//context and callback are not required now but left if for the function def
 exports.handler = async (event, context, callback) => {
 	let statusCode = 200;
 	let resultObj = {};
 	try {
-		const { scriptInfo } = event;
-		console.log(`Running ${scriptInfo.name}`);
+		const { name, script, save } = event;
 		
-		//get scrit from S3
-		const scriptContents = getScriptContents(scriptInfo);
+		//if script was provided directly that will take presedence
+		//else will try to find a loaded script in the S3
+		const scriptContents = await getScriptContents(name, script);
 		
-		const lambdaEnvironment = true;
-		const scriptRunner = await createScriptRunner(lambdaEnvironment);
+		const scriptRunner = await createScriptRunner(LAMBDA_ENV);
 		
     const result = await scriptRunner(scriptContents);
     if (result && result.size && result.size() > 0) {
+			//TODO: Remove the printing of data??
 			console.log('\nSTORAGE CONTENT:')
       const printData = (key, value) => { console.log(`* ${key}: ${value}`)};
       result.each(printData);
@@ -23,40 +27,36 @@ exports.handler = async (event, context, callback) => {
 		resultObj = result.toJSObject();
   } catch (error) {
 		console.error(error.message);
-		resultObj.error = error;
+		resultObj.error = error.message;
+		resultObj.errorStack = error.stack;
 		statusCode = 500;
-		// return callback(error);
   } finally {
 		try {
 			await endScriptRunner();
     } catch(error) {
-			resultObj.error = error;;
+			resultObj.error = error.message;
+			resultObj.errorStack = error.stack;
 			statusCode = 500;
 		}
   }
-	//return callback(null, resultObj);
+
 	//NEEDS to return a JSON formatted string
-  return {
+  return JSON.stringify({
 		statusCode: statusCode,
 		body: resultObj
-	}
+	})
 };
 
-function getScriptContents(script) {
-	let contents = script.contents;
-	if (!contents) {
-		contents = getScriptFromS3(script.name);
+async function getScriptContents(receivedName, receivedScript) {
+	let contents;
+	// if (receivedScript !== {}) {
+	if (Object.keys(receivedScript).length !== 0) {
+		contents = receivedScript;
+		console.log(`Running received script.`);
+	} else {
+		contents = await getScript(receivedName, LAMBDA_ENV);
+		console.log(`Running ${receivedName}`);
 	}
-	
-	return contents;
-}
 
-function getScriptFromS3(scriptName) {
-	const S3Client = require("aws-sdk/clients/s3");
-	const s3 = new S3Client({ region: process.env.S3_REGION });
-	
-	//for now return local script
-	const contents = require(`./scripts/${scriptName}`);
-	
-	return contents;
+	return contents
 }
