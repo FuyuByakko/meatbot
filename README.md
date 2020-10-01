@@ -4,10 +4,11 @@
 
 ### A script runner to automate browsing and getting content from webpages.
 
-#### The original purpose was to automate taking online tickets to a Japanese Yakiniku store.
-#### The idea then further grew and developed, so that it can now be utilized to run any script on most pages.
+#### The original purpose was to automate taking online tickets to a Japanese Yakiniku store, hence the name :).
+#### The idea then further grew and developed, so that it can now be utilized to run any provided script on most pages.
+#### (Single page apps, dynamic pages are not  yet fully supported, but can be circumvented by using delays (DELAY or Check presence) :) ). 
 
-#### (Single page apps, dynamic pages are not  yet fully supported, but can be circumvented by using delays (DELAY or Check presence) :) ) 
+#### Notice: Please be careful when running scripts received from others, as we allow use of scripts in JS format. 
 
 ***
 
@@ -91,7 +92,7 @@
 ### **Script composition**
 ```
 {
-  delay: <Number>   // delay between each action in ms (defaults to 0 if none is provided)
+  delayDelay: <Number>   // OPTIONAL: delay between each action in ms (defaults to 0 if none is provided)
   actions: [...]    // an array of actions to be performed
 }
 ```
