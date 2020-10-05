@@ -309,6 +309,8 @@ to start work:
 ### General TODOS
 - [x] Implement REPEAT action
 - [x] add overwrite true/false to GET action
+- [ ] separate github actions<br>
+  Only upload to S3 if actual lambda handler files changed.
 - [ ] set standarts on errors (ones that break execution or try to continue (get, click, etc))
 
 ### CLI TODOS

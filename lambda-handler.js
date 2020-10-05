@@ -21,9 +21,10 @@ exports.handler = async (event, context, callback) => {
 		
 		const result = await scriptRunner(scriptContents);
 		
-		//if script succeeds, async save given script to S3
+		//with save flag, if script succeeds and has a name, save given script to S3
 		if(save) {
-			saveScriptToS3(name, script);
+			console.log('Saving received script to S3')
+			await saveScriptToS3(name, script);
 		}
 
     if (result && result.size && result.size() > 0) {
@@ -31,9 +32,11 @@ exports.handler = async (event, context, callback) => {
 			console.log('\nSTORAGE CONTENT:')
       const printData = (key, value) => { console.log(`* ${key}: ${value}`)};
       result.each(printData);
-    }
+			resultObj = result.toJSObject();
+    } else {
+			resultObj['Empty Body'] = "Script did not save any data."
+		}
 		
-		resultObj = result.toJSObject();
   } catch (error) {
 		console.error(error.message);
 		resultObj.error = error.message;
@@ -57,7 +60,6 @@ exports.handler = async (event, context, callback) => {
 
 async function getScriptContents(receivedName, receivedScript) {
 	let contents;
-	// if (receivedScript !== {}) {
 	if (Object.keys(receivedScript).length !== 0) {
 		contents = receivedScript;
 		console.log(`Running received script.`);
